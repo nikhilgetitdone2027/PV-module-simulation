@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1kW PV Boost Converter Project - Interactive Report</title>
+    
+    <!-- Tailwind CSS (CDN for simplicity, or install locally) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Config for Tailwind Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        solar: { 100: '#fef3c7', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' },
+                        tech: { 50: '#f8fafc', 100: '#f1f5f9', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-tech-50 text-tech-800 font-sans leading-relaxed">
+
+    <!-- Navigation -->
+    <nav class="bg-tech-900 text-white sticky top-0 z-50 shadow-lg border-b-4 border-solar-500">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl animate-pulse">⚡</span>
+                <h1 class="font-bold text-lg tracking-wide">PV-Boost Dashboard <span class="hidden sm:inline text-xs bg-solar-600 text-white px-2 py-0.5 rounded ml-2">1kW / 150V</span></h1>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="flex space-x-4 text-sm font-medium">
+                    <a href="#design" class="hover:text-solar-500 transition-colors">Design</a>
+                    <a href="#architecture" class="hover:text-solar-500 transition-colors">System</a>
+                    <a href="#simulation" class="hover:text-solar-500 transition-colors">Results</a>
+                    <a href="#learning" class="hover:text-solar-500 transition-colors">Learning</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4 py-16 text-center">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider text-solar-600 uppercase bg-solar-100 rounded-full">
+                Second Year Simulation Project
+            </div>
+            <h2 class="text-4xl md:text-6xl font-extrabold text-tech-900 mb-6 leading-tight">
+                1kW PV-Based Boost Converter<br>
+                <span class="text-solar-500">with MPPT for 150V Output</span>
+            </h2>
+            <p class="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
+                A documentation of our journey in designing a stable renewable energy system. 
+                Focusing on component sizing, MATLAB Simulink modeling, and PID control tuning.
+            </p>
+            
+            <!-- Team Members -->
+            <div class="bg-tech-50 rounded-xl p-6 max-w-5xl mx-auto border border-gray-200 shadow-inner">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Project Team (NIT Jamshedpur)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-sm font-medium text-tech-800">
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Nikhil Kumar <span class="block text-[10px] text-gray-500">2023UGEE031</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Prakash Kumar <span class="block text-[10px] text-gray-500">2023UGEE009</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Anikesh <span class="block text-[10px] text-gray-500">2023UGEE001</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Hemant Sharma <span class="block text-[10px] text-gray-500">2023UGEE020</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Rishav Raj <span class="block text-[10px] text-gray-500">2023UGEE034</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Ayush Raghav <span class="block text-[10px] text-gray-500">2023UGEE007</span></div></div>
+                    <div class="group"><div class="p-2 rounded hover:bg-white transition">Deepranjan <span class="block text-[10px] text-gray-500">2023UGEE039</span></div></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 space-y-24">
+
+        <!-- 1. DESIGN CALCULATOR & THEORY -->
+        <section id="design" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-solar-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">Design Calculator</h3>
+                    <p class="text-sm text-gray-500">Continuous Conduction Mode (CCM) Parameter Sizing</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Inputs -->
+                <div class="lg:col-span-4 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                    <h4 class="font-bold text-tech-900 mb-6 border-b pb-2 flex justify-between items-center">
+                        Input Parameters
+                        <span class="text-xs font-normal bg-blue-100 text-blue-800 px-2 py-1 rounded">Editable</span>
+                    </h4>
+                    <div class="space-y-5">
+                        <div class="relative group">
+                            <label class="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-solar-500">Power (P)</label>
+                            <input type="number" id="in_P" value="1000" class="w-full bg-transparent border-2 border-gray-200 rounded-lg px-4 py-3 text-tech-900 focus:border-solar-500 focus:ring-0 outline-none transition-colors">
+                            <span class="absolute right-4 top-3 text-sm text-gray-400">Watts</span>
+                        </div>
+                        <div class="relative group">
+                            <label class="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-solar-500">Input Voltage (Vin)</label>
+                            <input type="number" id="in_Vin" value="45" class="w-full bg-transparent border-2 border-gray-200 rounded-lg px-4 py-3 text-tech-900 focus:border-solar-500 focus:ring-0 outline-none transition-colors">
+                            <span class="absolute right-4 top-3 text-sm text-gray-400">Volts</span>
+                        </div>
+                        <div class="relative group">
+                            <label class="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-solar-500">Target Output (Vout)</label>
+                            <input type="number" id="in_Vout" value="150" class="w-full bg-transparent border-2 border-gray-200 rounded-lg px-4 py-3 text-tech-900 focus:border-solar-500 focus:ring-0 outline-none transition-colors">
+                            <span class="absolute right-4 top-3 text-sm text-gray-400">Volts</span>
+                        </div>
+                        <div class="relative group">
+                            <label class="absolute -top-2 left-2 bg-white px-1 text-xs font-bold text-solar-500">Frequency (fs)</label>
+                            <input type="number" id="in_fs" value="10000" class="w-full bg-transparent border-2 border-gray-200 rounded-lg px-4 py-3 text-tech-900 focus:border-solar-500 focus:ring-0 outline-none transition-colors">
+                            <span class="absolute right-4 top-3 text-sm text-gray-400">Hz</span>
+                        </div>
+                        <button onclick="updateCalculations()" class="w-full bg-tech-800 hover:bg-solar-500 text-white font-bold py-3 rounded-lg shadow-md transition-all transform hover:scale-[1.02] active:scale-95">
+                            Recalculate Components
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Outputs & Derivations -->
+                <div class="lg:col-span-8 flex flex-col gap-6">
+                    <!-- Calculator Results -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-br from-solar-50 to-white p-6 rounded-2xl border border-solar-200 shadow-sm">
+                            <div class="text-solar-600 font-bold text-xs uppercase mb-2 tracking-wider">Duty Cycle (D)</div>
+                            <div class="text-5xl font-black text-tech-900 mb-2" id="out_D">0.70</div>
+                            <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                                <div id="bar_D" class="h-full bg-solar-500 transition-all duration-500" style="width: 70%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-2 font-mono">D = (Vout - Vin) / Vout</div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative group hover:border-blue-400 transition-colors">
+                            <div class="absolute top-0 right-0 bg-blue-50 text-blue-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Ripple: 1%</div>
+                            <div class="text-gray-500 font-bold text-xs uppercase mb-1">Inductance (L)</div>
+                            <div class="text-4xl font-extrabold text-tech-900"><span id="out_L">14.8</span> <span class="text-lg text-gray-400">mH</span></div>
+                            <div class="text-xs text-gray-400 mt-3 flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Ensures CCM Mode
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative group hover:border-purple-400 transition-colors">
+                            <div class="absolute top-0 right-0 bg-purple-50 text-purple-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl">Ripple: 1%</div>
+                            <div class="text-gray-500 font-bold text-xs uppercase mb-1">Capacitance (C)</div>
+                            <div class="text-4xl font-extrabold text-tech-900"><span id="out_C">298</span> <span class="text-lg text-gray-400">μF</span></div>
+                            <div class="text-xs text-gray-400 mt-3 flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span> Filters Voltage
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:border-green-400 transition-colors">
+                            <div class="text-gray-500 font-bold text-xs uppercase mb-1">Load Resistance (R)</div>
+                            <div class="text-4xl font-extrabold text-tech-900"><span id="out_R">23.4</span> <span class="text-lg text-gray-400">Ω</span></div>
+                            <div class="text-xs text-gray-400 mt-3 font-mono">Assumed Efficiency: 96%</div>
+                        </div>
+                    </div>
+
+                    <!-- Theory & Derivations -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-tech-900 mb-4 flex items-center text-sm uppercase tracking-wide">
+                            <span class="text-lg mr-2">📚</span> Theoretical Derivations
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <h5 class="font-bold text-solar-600 mb-2">1. Inductor Design (L)</h5>
+                                <p class="mb-2 text-xs"><strong>Objective:</strong> Limit current ripple (&Delta;I<sub>L</sub>) to ensure continuous conduction.</p>
+                                <p class="mb-1 text-xs"><strong>Switch ON:</strong> Inductor stores energy. V<sub>L</sub> = V<sub>in</sub>.</p>
+                                <p class="font-mono text-xs bg-white p-2 border rounded mb-2 text-center text-tech-800">
+                                    &Delta;I<sub>L</sub> = (V<sub>in</sub> &middot; D) / (L &middot; f<sub>s</sub>)
+                                </p>
+                                <p class="text-xs text-gray-500">Rearranged, this yields the formula used to calculate L above.</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <h5 class="font-bold text-solar-600 mb-2">2. Capacitor Design (C)</h5>
+                                <p class="mb-2 text-xs"><strong>Objective:</strong> Limit output voltage ripple (&Delta;V<sub>out</sub>) to 1-2%.</p>
+                                <p class="mb-1 text-xs"><strong>Switch ON:</strong> Capacitor discharges to load. &Delta;Q = I<sub>out</sub> &middot; D &middot; T.</p>
+                                <p class="font-mono text-xs bg-white p-2 border rounded mb-2 text-center text-tech-800">
+                                    &Delta;V<sub>out</sub> = (I<sub>out</sub> &middot; D) / (C &middot; f<sub>s</sub>)
+                                </p>
+                                <p class="text-xs text-gray-500">Solving for C ensures a steady DC output voltage.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SYSTEM ARCHITECTURE -->
+        <section id="architecture" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex flex-wrap items-center justify-between mb-8">
+                <div class="flex items-center space-x-4">
+                    <div class="w-1.5 h-10 bg-solar-500 rounded-full"></div>
+                    <div>
+                        <h3 class="text-3xl font-bold text-tech-900">System Architecture</h3>
+                        <p class="text-sm text-gray-500">Interactive Simulink Model</p>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center space-x-4 mt-4 sm:mt-0">
+                    <div class="flex items-center bg-gray-200 rounded-lg p-1">
+                        <button onclick="switchView('conceptual')" id="btn-conceptual" class="px-4 py-1.5 rounded-md text-sm font-bold bg-white text-tech-900 shadow-sm transition-all">Conceptual</button>
+                        <button onclick="switchView('schematic')" id="btn-schematic" class="px-4 py-1.5 rounded-md text-sm font-bold text-gray-500 hover:text-tech-900 transition-all">Schematic</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-auto lg:min-h-[600px]">
+                
+                <!-- Diagram Container -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl border border-gray-200 relative overflow-hidden flex flex-col">
+                    
+                    <!-- View 1: Conceptual Interactive -->
+                    <div id="view-conceptual" class="p-8 flex-grow flex flex-col justify-center transition-opacity duration-300 relative">
+                        <div class="absolute top-4 left-4 text-xs font-bold text-gray-300 tracking-widest">INTERACTIVE DIAGRAM</div>
+                        
+                        <!-- Main Power Path -->
+                        <div class="flex items-center justify-between mb-20 relative z-10">
+                            <!-- PV -->
+                            <button onclick="loadDetail('pv')" class="interactive-card w-28 h-28 bg-blue-50 border-2 border-blue-200 rounded-xl flex flex-col items-center justify-center p-2 text-center group">
+                                <span class="text-3xl mb-2">☀️</span>
+                                <span class="text-xs font-bold text-blue-900">PV Array</span>
+                            </button>
+                            
+                            <!-- Connector -->
+                            <div class="connector" id="con1"></div>
+                            
+                            <!-- Boost -->
+                            <button onclick="loadDetail('boost')" class="interactive-card w-36 h-28 bg-solar-50 border-2 border-solar-200 rounded-xl flex flex-col items-center justify-center p-2 text-center group">
+                                <span class="text-3xl mb-2">⚡</span>
+                                <span class="text-xs font-bold text-solar-900">Boost Converter</span>
+                                <span class="text-[9px] text-gray-500 mt-1 font-mono">IGBT, L, C, Diode</span>
+                            </button>
+                            
+                            <!-- Connector -->
+                            <div class="connector" id="con2"></div>
+                            
+                            <!-- Load -->
+                            <button onclick="loadDetail('load')" class="interactive-card w-28 h-28 bg-gray-50 border-2 border-gray-200 rounded-xl flex flex-col items-center justify-center p-2 text-center group">
+                                <span class="text-3xl mb-2">💡</span>
+                                <span class="text-xs font-bold text-gray-900">Load</span>
+                            </button>
+                        </div>
+
+                        <!-- Feedback Path Visual -->
+                        <div class="absolute top-[40%] left-[15%] w-[70%] h-[40%] border-b-2 border-l-2 border-r-2 border-dashed border-gray-300 rounded-b-3xl pointer-events-none -z-0"></div>
+
+                        <!-- Control Logic Row -->
+                        <div class="flex items-center justify-center space-x-4 relative z-10 mt-4">
+                            <!-- Sensors -->
+                            <button onclick="loadDetail('measure')" class="interactive-card w-20 h-20 bg-white border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center text-[10px] font-bold text-gray-600">
+                                <span class="text-lg">📈</span>
+                                <span>Sensors</span>
+                            </button>
+
+                            <!-- Math -->
+                            <button onclick="loadDetail('math')" class="interactive-card w-16 h-16 bg-gray-50 border border-gray-300 rounded-lg flex items-center justify-center text-[10px] text-gray-500">
+                                Math
+                            </button>
+
+                            <!-- MPPT -->
+                            <button onclick="loadDetail('mppt')" class="interactive-card w-24 h-24 bg-purple-50 border-2 border-purple-200 rounded-xl flex flex-col items-center justify-center p-2">
+                                <span class="text-2xl mb-1">📊</span>
+                                <span class="text-xs font-bold text-purple-900">MPPT<br>(P&O)</span>
+                            </button>
+
+                            <!-- PID -->
+                            <button onclick="loadDetail('pid')" class="interactive-card w-24 h-24 bg-green-50 border-2 border-green-200 rounded-xl flex flex-col items-center justify-center p-2">
+                                <span class="text-2xl mb-1">🎛️</span>
+                                <span class="text-xs font-bold text-green-900">PID<br>Controller</span>
+                            </button>
+
+                            <!-- PWM -->
+                            <button onclick="loadDetail('pwm')" class="interactive-card w-20 h-20 bg-white border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center text-[10px] font-bold text-gray-600">
+                                <span class="text-lg">PWM</span>
+                                <span>Driver</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Extra Utility Blocks -->
+                        <div class="absolute bottom-4 left-4 flex space-x-2">
+                            <button onclick="loadDetail('powergui')" class="px-2 py-1 bg-gray-200 text-[10px] rounded hover:bg-gray-300">PowerGUI</button>
+                            <button onclick="loadDetail('scope')" class="px-2 py-1 bg-gray-200 text-[10px] rounded hover:bg-gray-300">Scope</button>
+                        </div>
+                    </div>
+
+                    <!-- View 2: Actual Schematic -->
+                    <div id="view-schematic" class="hidden p-4 flex-grow flex-col items-center justify-center bg-gray-50 transition-opacity duration-300">
+                        <img src="image_6406c3.png" 
+                             alt="Simulink Schematic Screenshot" 
+                             class="max-w-full h-auto max-h-[500px] object-contain rounded shadow-lg border border-gray-300 bg-white"
+                             onerror="this.style.display='none'; document.getElementById('img-error').classList.remove('hidden');">
+                        
+                        <div id="img-error" class="hidden text-center p-12 bg-white rounded-xl border border-red-200">
+                            <span class="text-5xl block mb-4">🖼️</span>
+                            <h4 class="text-red-500 font-bold text-lg">Image Not Found</h4>
+                            <p class="text-sm text-gray-500 mt-2">Please ensure the file <strong>image_6406c3.png</strong> is in the folder.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Panel -->
+                <div id="detail-panel" class="lg:col-span-1 bg-tech-800 text-white rounded-2xl shadow-xl p-8 flex flex-col transition-all duration-300">
+                    <div class="uppercase text-[10px] font-bold text-solar-500 mb-6 tracking-widest border-b border-gray-700 pb-2">
+                        System Specifications
+                    </div>
+                    <div id="detail-content" class="flex-grow space-y-4">
+                        <div class="text-center mt-12 opacity-50">
+                            <div class="text-4xl mb-4">👆</div>
+                            <h4 class="text-lg font-bold">Select a Block</h4>
+                            <p class="text-sm">Click diagram elements to reveal design specifications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ELEMENT DESCRIPTIONS AND AIMS -->
+            <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                <h3 class="text-2xl font-bold text-tech-900 mb-4">System Elements & Design Aims</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-solar-600 mb-2">Power Generation & Conversion</h4>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li><span class="font-bold text-gray-900">Solar PV Array Block:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To simulate real-world solar panel behavior.</span>
+                                Generates variable DC power based on irradiance (1000 W/m²) and temperature (25°C) inputs.
+                            </li>
+                            <li><span class="font-bold text-gray-900">Boost Converter (L, Switch, Diode, C):</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To step up the low PV voltage to a higher target level.</span>
+                                Steps up voltage from ~45V to 150V. Inductor stores energy, switch controls flow, diode prevents backflow, capacitor filters ripple.
+                            </li>
+                            <li><span class="font-bold text-gray-900">Resistive Load:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To consume the generated power.</span>
+                                Represents the application consuming the power (calculated for 1kW at 150V).
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-solar-600 mb-2">Control & Measurement</h4>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li><span class="font-bold text-gray-900">V & I Measurement:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To provide feedback for control logic.</span>
+                                Sensors measuring real-time voltage and current for Power calculation (P = V*I).
+                            </li>
+                            <li><span class="font-bold text-gray-900">MPPT (P&O) Logic:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To extract maximum available power.</span>
+                                Perturb & Observe algorithm using math blocks and delays to track the Maximum Power Point (MPP).
+                            </li>
+                            <li><span class="font-bold text-gray-900">PID Controller:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To ensure stability and fast response.</span>
+                                Tuned controller (Kp=181.48, Ti=0.0576) that adjusts the duty cycle to maintain stable 150V output with minimal error.
+                            </li>
+                             <li><span class="font-bold text-gray-900">PWM Generator:</span> 
+                                <span class="block text-xs text-gray-500 italic">Aim: To drive the electronic switch.</span>
+                                Converts the control signal into ON/OFF pulses for the IGBT/MOSFET switch.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SIMULATION RESULTS -->
+        <section id="simulation" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-solar-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">Simulation Results</h3>
+                    <p class="text-sm text-gray-500">Visualized Output from Simulink Scopes</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- PID Tuning Detail (New Section based on PDF Slide 6) -->
+                <div class="md:col-span-4 bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                    <h4 class="font-bold text-tech-900 mb-4 text-sm uppercase tracking-wide">PID Tuning Details</h4>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <span class="block text-xs font-bold text-gray-500">Problem Identification</span>
+                            <p class="text-gray-700">Initial simulations showed instability. Plant was identified as an <strong>"Underdamped Pair"</strong>.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <span class="block text-xs font-bold text-solar-600 mb-1">Tuned Parameters</span>
+                            <div class="grid grid-cols-2 gap-2 font-mono text-xs">
+                                <div>K (Proportional):</div><div class="font-bold text-right">181.48</div>
+                                <div>Tw (Time Const):</div><div class="font-bold text-right">0.0576</div>
+                                <div>Zeta (Damping):</div><div class="font-bold text-right">0.00635</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 italic">Data Source: PID Tuner / Plant Identification Tool (Slide 6)</p>
+                    </div>
+                </div>
+
+                <!-- Voltage Chart -->
+                <div class="md:col-span-8 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                    <h4 class="font-bold text-tech-900 text-sm mb-6">Output Voltage Response (Vout)</h4>
+                    <div class="w-full h-[300px] md:h-[350px] bg-gray-50 rounded-xl border border-gray-200 overflow-hidden flex items-center justify-center">
+                        <img src="outputvolatge.png" 
+                             alt="Output Voltage Graph" 
+                             class="max-w-full max-h-full object-contain"
+                             onerror="this.parentElement.innerHTML='<div class=\'text-center text-gray-500 p-4\'><span class=\'text-3xl block mb-2\'>📉</span>Image outputvolatge.png not found</div>'">
+                    </div>
+                    <div class="mt-6 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <strong>Analysis:</strong> The output voltage successfully reaches and stabilizes at the target 150V with a very fast rise time (< 0.1s) and zero steady-state error, confirming effective PID control.
+                    </div>
+                </div>
+
+                <!-- PID Tuning Results -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 md:col-span-6">
+                    <h4 class="font-bold text-tech-900 text-sm mb-6">PID Controller Tuning & Plant Identification</h4>
+                    <div class="w-full h-[300px] md:h-[350px] bg-gray-50 rounded-xl border border-gray-200 overflow-hidden flex items-center justify-center">
+                        <img src="tuning.png" 
+                             alt="PID Tuning Result Graph" 
+                             class="max-w-full max-h-full object-contain"
+                             onerror="this.parentElement.innerHTML='<div class=\'text-center text-gray-500 p-4\'><span class=\'text-3xl block mb-2\'>📉</span>Image tuning.png not found</div>'">
+                    </div>
+                    <div class="mt-6 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <strong>Analysis:</strong> The plant was identified as an "Underdamped Pair". The PID controller was tuned for a fast, stable response with minimal overshoot, as shown in the step response.
+                    </div>
+                </div>
+
+                <!-- PV Power Tracking Results -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 md:col-span-6">
+                    <h4 class="font-bold text-tech-900 text-sm mb-6">PV Array Power Tracking (MPPT)</h4>
+                    <div class="w-full h-[300px] md:h-[350px] bg-gray-50 rounded-xl border border-gray-200 overflow-hidden flex items-center justify-center">
+                        <img src="pvarraypowergraph.png" 
+                             alt="PV Array Power Graph" 
+                             class="max-w-full max-h-full object-contain"
+                             onerror="this.parentElement.innerHTML='<div class=\'text-center text-gray-500 p-4\'><span class=\'text-3xl block mb-2\'>📉</span>Image pvarraypowergraph.png not found</div>'">
+                    </div>
+                    <div class="mt-6 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <strong>Analysis:</strong> The Perturb & Observe (P&O) algorithm rapidly extracts the maximum available power (approx. 1000W). The power output oscillates slightly around the Maximum Power Point (MPP), which is characteristic of the P&O method.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. LEARNING OUTCOMES & DOCUMENTATION -->
+        <section id="learning" class="max-w-6xl mx-auto scroll-mt-24 pb-12 border-b border-gray-200">
+            <div class="flex items-center space-x-4 mb-12">
+                <div class="w-1.5 h-12 bg-solar-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-4xl font-bold text-tech-900">Project Journey & Learning Outcomes</h3>
+                    <p class="text-lg text-gray-500">Reflections from our Second Year Simulation Project</p>
+                </div>
+            </div>
+
+            <div class="space-y-16">
+                <!-- PHASE 1: Theory & Concepts -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 text-3xl">📚</div>
+                        <h4 class="text-2xl font-bold text-tech-900 mb-2">Phase 1: Concepts Mastered</h4>
+                        <p class="text-sm font-bold text-blue-600 uppercase tracking-wider">Kya Padhe (What We Learned)</p>
+                    </div>
+                    <div class="md:col-span-8 space-y-6 text-gray-700 leading-relaxed">
+                        <p>
+                            The foundational phase of our project was dedicated to understanding the core theoretical concepts that govern renewable energy systems. We delved deep into power electronics, specifically focusing on the <strong>Boost Converter Topology</strong>. We learned how an inductor, switch, diode, and capacitor can be configured to step up a lower DC voltage to a higher one, and the critical importance of operating in Continuous Conduction Mode (CCM) for stability.
+                        </p>
+                        <p>
+                            A significant portion of our study was devoted to <strong>Maximum Power Point Tracking (MPPT)</strong>. We studied the non-linear I-V and P-V characteristics of solar cells and understood why a direct connection to a load is inefficient. We learned various MPPT algorithms, ultimately selecting the <strong>"Perturb & Observe" (P&O)</strong> method for its balance of simplicity and effectiveness.
+                        </p>
+                        <p>
+                            Finally, we studied classical <strong>Control Systems</strong> theory to understand how to tame the dynamic behavior of the converter. We learned about feedback loops, error signals, and how a <strong>Proportional-Integral-Derivative (PID)</strong> controller can be used to eliminate steady-state error and improve transient response.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- PHASE 2: Practical Implementation -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 bg-green-50 p-6 rounded-2xl border border-green-100">
+                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-4 text-3xl">🛠️</div>
+                        <h4 class="text-2xl font-bold text-tech-900 mb-2">Phase 2: Skills Acquired</h4>
+                        <p class="text-sm font-bold text-green-600 uppercase tracking-wider">Kya Sikhe (Practical Skills)</p>
+                    </div>
+                    <div class="md:col-span-8 space-y-6 text-gray-700 leading-relaxed">
+                        <p>
+                            Translating theory into practice was the most rewarding part of the journey. Our primary tool was <strong>MATLAB & Simulink</strong>. We gained proficiency in its library, learning to build complex power systems block-by-block, from PV arrays and IGBTs to control logic gates and PWM generators.
+                        </p>
+                        <p>
+                            A crucial practical skill was <strong>Component Sizing</strong>. We didn't just use arbitrary values; we applied the design formulas we derived to calculate the precise Inductance (L) and Capacitance (C) needed to meet our ripple requirements (<1%). This connected the math directly to the simulation performance.
+                        </p>
+                        <p>
+                            We also learned the art of <strong>PID Tuning</strong>. Initially attempting manual tuning, we quickly realized its difficulty. We then learned to use MATLAB's automated <strong>PID Tuner App</strong>. This involved linearizing the plant model at an operating point, identifying its structure (underdamped pair), and interactively adjusting response time and transient behavior to achieve the perfect control loop.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- PHASE 3: Challenges & Solutions -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-4 bg-red-50 p-6 rounded-2xl border border-red-100">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-4 text-3xl">🚧</div>
+                        <h4 class="text-2xl font-bold text-tech-900 mb-2">Phase 3: Challenges Faced</h4>
+                        <p class="text-sm font-bold text-red-600 uppercase tracking-wider">Kya Problems Aaye (Hurdles)</p>
+                    </div>
+                    <div class="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <h5 class="font-bold text-red-600 mb-2 flex items-center"><span class="mr-2">🔴</span> Problem 1: Open-Loop Instability</h5>
+                            <p class="text-sm text-gray-600 mb-4">Our initial simulations without a controller were highly unstable. The output voltage would fluctuate wildly with any change in input irradiance or load, never settling at the desired 150V.</p>
+                            <div class="bg-green-50 p-3 rounded-lg text-sm font-bold text-green-700 flex items-center">
+                                <span class="mr-2">🟢</span> Solution: Implemented a closed-loop PID controller to provide corrective feedback.
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <h5 class="font-bold text-red-600 mb-2 flex items-center"><span class="mr-2">🔴</span> Problem 2: High Voltage Ripple</h5>
+                            <p class="text-sm text-gray-600 mb-4">Using standard capacitor values, our output voltage had a ripple of over 5%, which is unacceptable for a stable DC supply.</p>
+                            <div class="bg-green-50 p-3 rounded-lg text-sm font-bold text-green-700 flex items-center">
+                                <span class="mr-2">🟢</span> Solution: Re-derived the capacitor design formula and calculated the exact value needed for <1% ripple.
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm md:col-span-2">
+                            <h5 class="font-bold text-red-600 mb-2 flex items-center"><span class="mr-2">🔴</span> Problem 3: PID Tuning Difficulty</h5>
+                            <p class="text-sm text-gray-600 mb-4">Manually adjusting the Kp, Ki, and Kd gains was a frustrating process of trial and error. Increasing one gain to improve rise time often led to massive overshoot or oscillations.</p>
+                            <div class="bg-green-50 p-3 rounded-lg text-sm font-bold text-green-700 flex items-center">
+                                <span class="mr-2">🟢</span> Solution: Leveraged MATLAB's automated PID Tuner tool to scientifically identify the plant and optimize the gains for a robust response.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. LITERATURE REVIEW -->
+        <section id="literature" class="max-w-6xl mx-auto pb-20 scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-solar-500 rounded-full"></div>
+                <h3 class="text-3xl font-bold text-tech-900">Literature Review</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Paper 1 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:border-solar-500 transition-all hover:shadow-lg group">
+                    <div class="text-xs font-bold text-solar-600 mb-3 flex items-center">
+                        <span class="bg-solar-100 px-2 py-1 rounded mr-2">PAPER 1</span> Porselvi et al.
+                    </div>
+                    <h4 class="font-bold text-tech-900 mb-3 text-lg group-hover:text-solar-500 transition-colors">Perturb And Observation Based MPPT Control</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Established the need to treat the PV array and converter as a single coupled system. Validated P&O algorithm for maximum power extraction under non-ideal conditions.</p>
+                </div>
+
+                <!-- Paper 2 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:border-solar-500 transition-all hover:shadow-lg group">
+                    <div class="text-xs font-bold text-solar-600 mb-3 flex items-center">
+                        <span class="bg-solar-100 px-2 py-1 rounded mr-2">PAPER 2</span> Patel et al.
+                    </div>
+                    <h4 class="font-bold text-tech-900 mb-3 text-lg group-hover:text-solar-500 transition-colors">Simulation of Standalone PV System</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Provided mathematical models for PV cells and highlighted the utility of high-gain boost converters for standalone systems. Validated using a 60W Solarex panel.</p>
+                </div>
+
+                <!-- Paper 3 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:border-solar-500 transition-all hover:shadow-lg group">
+                    <div class="text-xs font-bold text-solar-600 mb-3 flex items-center">
+                        <span class="bg-solar-100 px-2 py-1 rounded mr-2">PAPER 3</span> Vaikundaselvan et al.
+                    </div>
+                    <h4 class="font-bold text-tech-900 mb-3 text-lg group-hover:text-solar-500 transition-colors">Design of MPPT Based Buck-Boost Converter</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Demonstrated that P&O algorithms effectively track MPP despite temperature and irradiance variations. Simulation proved stable power output capability.</p>
+                </div>
+
+                <!-- Paper 4 -->
+                <div class="bg-white p-8 rounded-2xl border border-gray-200 hover:border-solar-500 transition-all hover:shadow-lg group">
+                    <div class="text-xs font-bold text-solar-600 mb-3 flex items-center">
+                        <span class="bg-solar-100 px-2 py-1 rounded mr-2">PAPER 4</span> Gupta et al.
+                    </div>
+                    <h4 class="font-bold text-tech-900 mb-3 text-lg group-hover:text-solar-500 transition-colors">Performance Analysis using MATLAB Simulink</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Detailed the I-V characteristics logic and validated the MATLAB simulation approach for combining MPPT logic with boost converter topology.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-tech-900 text-gray-400 py-12 text-center text-sm border-t border-gray-800">
+        <p class="mb-2">&copy; 2025 Dept. of Electrical Engineering, NIT Jamshedpur</p>
+        <p class="text-xs text-gray-600">Generated for Final Year Project Presentation</p>
+    </footer>
+
+    <!-- Link to External JS -->
+    <script src="script.js"></script>
+</body>
+</html>

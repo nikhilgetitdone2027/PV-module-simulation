@@ -1,0 +1,50 @@
+/* Chart Container Styling */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 300px;
+    max-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+
+/* Connector Lines for Diagram */
+.connector {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #cbd5e1;
+    position: relative;
+    min-width: 20px;
+}
+
+.connector::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 8px solid #cbd5e1;
+}
+
+/* Interactive Card Styling */
+.interactive-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.interactive-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-color: #f59e0b;
+}
+
+.interactive-card:active {
+    transform: translateY(0);
+}
